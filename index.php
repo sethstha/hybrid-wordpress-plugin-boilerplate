@@ -21,29 +21,30 @@
 function hb_register_custom_menu_page()
 {
 
-    add_menu_page(__('Hybrid Plugin', 'hybrid'),
+    add_menu_page(
+        __('Hybrid Plugin', 'hybrid'),
         'Hybrid Plugin',
         'manage_options',
         dirname(__FILE__) . '/page.php',
         '',
-        90);
+        90
+    );
 }
 add_action('admin_menu', 'hb_register_custom_menu_page');
 
 function hb_register_scripts()
 {
-
     $script_dependencies = array(
         'dependencies' => null,
         'version' => null,
     );
+    $script = (defined('HYBRID_DEV') && HYBRID_DEV) ? 'http://localhost:3000/dist/app.js' : __DIR__ . '/assets/js/build/app.js';
 
     if (file_exists(__DIR__ . '/assets/js/build/app.asset.php')) {
         $script_dependencies = require __DIR__ . '/assets/js/build/app.asset.php';
     }
 
-
-    wp_enqueue_script('hybrid-plugin', 'http://localhost:3000/dist/app.js', $script_dependencies['dependencies'], $script_dependencies['version'], true);
+    wp_enqueue_script('hybrid-plugin', $script, $script_dependencies['dependencies'], $script_dependencies['version'], true);
 }
 add_action('admin_init', 'hb_register_scripts');
 ?>

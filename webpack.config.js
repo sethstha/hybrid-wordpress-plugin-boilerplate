@@ -1,7 +1,8 @@
 const path = require("path");
 const DependencyExtractionPlugin = require("@wordpress/dependency-extraction-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
-
+const DotEnv = require("dotenv").config();
+const WebPackDotEnv = require("dotenv-webpack");
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 module.exports = {
@@ -55,6 +56,7 @@ module.exports = {
       new ReactRefreshWebpackPlugin({
         overlay: false,
       }),
+    new WebPackDotEnv(),
     new DependencyExtractionPlugin(),
   ].filter(Boolean),
   resolve: {
@@ -62,7 +64,7 @@ module.exports = {
   },
   devServer: {
     headers: { "Access-Control-Allow-Origin": "*" },
-    allowedHosts: ["test.test"],
+    allowedHosts: [DotEnv.parsed.WORDPRESS_URL.replace("http://", "")],
     host: "localhost",
     port: 3000,
   },
